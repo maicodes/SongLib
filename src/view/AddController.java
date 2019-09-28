@@ -3,11 +3,10 @@ package view;
 import java.io.IOException;
 import java.util.Optional;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
+
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -15,11 +14,75 @@ import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import classes.Song;
+import classes.SongList;
 
 public class AddController {
-	
+	@FXML
+	Button addBtn;
 	
 	@FXML
-	void addSong() {}
+	TextField songname;
+	@FXML
+	TextField artist;
+	@FXML
+	TextField album;
+	@FXML
+	TextField year;
+
+	
+	@FXML
+	void addSong(ActionEvent event) {
+		String title = songname.getText();
+		String artistName = artist.getText();
+		String albumName = album.getText();
+		int yearPublic = Integer.parseInt(year.getText());
+		Song newSong = new Song(title, artistName, albumName, yearPublic);
+		boolean isAdded = SongList.addNewSong(newSong);
+		Stage stage = (Stage) addBtn.getScene().getWindow();
+		System.out.println(isAdded + "");
+		if ( !isAdded ) {
+			showAlert(stage, false);
+		}
+		else {
+			showAlert(stage, true);
+		}
+	}
+	
+	private void showAlert(Stage mainStage, boolean isAdded) {                
+	      Alert alert = 
+	         new Alert(AlertType.INFORMATION);
+	      //alert.initModality(Modality.NONE);
+	      alert.initOwner(mainStage);
+	      alert.setTitle("Add New Song");
+	      String content ="";
+	      if ( !isAdded ) {
+	    	   alert.setHeaderText(
+	    	           "Cannot add new song");
+	    	            content = "This song has already existed";
+	      } else {
+	    	   alert.setHeaderText(
+	    	           "Song is added");
+	    	   content = "OK!";
+	      }
+	          alert.setContentText(content);
+	          alert.showAndWait();
+	          
+	   }
+	
+	@FXML
+	void backToList(ActionEvent event) {
+		System.out.println( "here");
+		try {
+			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
+			Scene newScene = new Scene (editView);
+			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
+			
+			window.setScene(newScene);
+			window.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
