@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -78,7 +78,7 @@ public class SongListController {
 	@FXML
 	private void moveToEditSong(ActionEvent event) {
 		try {
-			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/EditView.fxml"));
+			GridPane editView = FXMLLoader.load(getClass().getResource("/view/EditView.fxml"));
 			Scene newScene = new Scene (editView);
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
 			
@@ -91,7 +91,20 @@ public class SongListController {
 		
 	}
 	@FXML
-	private void moveToAddSong() {}
+	private void moveToAddSong (ActionEvent event) {
+		try {
+			GridPane editView = FXMLLoader.load(getClass().getResource("/view/AddView.fxml"));
+			Scene newScene = new Scene (editView);
+			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
+			
+			window.setScene(newScene);
+			window.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
+	
 	@FXML
 	private void deleteSong() {}
 
