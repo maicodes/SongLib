@@ -32,8 +32,8 @@ public class SongList {
 	}
 	
 	public static boolean editSong(Song song) {
-		String title = song.title;
-		String artist = song.artist;
+		String title = song.getTitle();
+		String artist = song.getArtist();
 		if ( songListTM.containsKey(title) && songListTM.get(title).containsKey(artist) ) {
 			
 			return true;
@@ -42,8 +42,8 @@ public class SongList {
 	}
 	
 	public static boolean addNewSong(Song newSong) {
-		String title = newSong.title;
-		String artist = newSong.artist;
+		String title = newSong.getTitle();
+		String artist = newSong.getArtist();
 		if ( songListTM.containsKey(title) ) {
 			if (songListTM.get(title).containsKey(artist) ) {
 				return false;
