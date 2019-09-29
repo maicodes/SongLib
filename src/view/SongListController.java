@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
+import java.util.TreeMap;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView;
@@ -15,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import classes.Song;
+import classes.SongList;
 
 
 public class SongListController {
@@ -34,32 +37,25 @@ public class SongListController {
 //	Scene addScene;
 //	Scene editScene;
 
-	private ObservableList<String> obsList;              
-
+	private ObservableList<Song> obsList;  
+	private ObservableList<String> obsListTitle;  
+	
 	public void start(Stage mainStage) {                
 		// create an ObservableList 
 		// from an ArrayList 
-		//window = mainStage;
-		obsList = FXCollections.observableArrayList(                                                              
-				"Patriots",
-				"49ers",
-				"Rams",
-				"Packers",
-				"Colts",
-				"Cowboys",
-				"Broncos",
-				"Vikings",
-				"Dolphins",
-				"Titans",
-				"Seahawks",
-				"Steelers",
-				"Jaguars"); 
+		obsListTitle = SongList.getTitlesAndArtists();
+		obsList = SongList.getSongs();
 
-		listView.setItems(obsList); 
+		listView.setItems(obsListTitle); 
 		
 		// select the first item
-	      listView.getSelectionModel().select(0);
-	      title.setText(obsList.get(0));  
+		if ( obsList.size() > 0 ) {
+			 listView.getSelectionModel().select(0);
+		     title.setText(obsList.get(0).getTitle());  
+		     artist.setText(obsList.get(0).getArtist());
+			 album.setText(obsList.get(0).getAlbum());
+			 year.setText(obsList.get(0).getYear());
+		}
 	      // set listener for the items
 	      listView
 	        .getSelectionModel()
@@ -72,7 +68,10 @@ public class SongListController {
 	}
 	
 	private void showItem(Stage mainStage, int idx) {                
-		 title.setText(obsList.get(idx));   
+		 title.setText(obsList.get(idx).getTitle());  
+		 artist.setText(obsList.get(idx).getArtist());
+		 album.setText(obsList.get(idx).getAlbum());
+		 year.setText(obsList.get(idx).getYear());
 	}
 	
 	@FXML
@@ -106,6 +105,8 @@ public class SongListController {
 	}	
 	
 	@FXML
-	private void deleteSong() {}
+	private void deleteSong(ActionEvent event) {
+		
+	}
 
 }
