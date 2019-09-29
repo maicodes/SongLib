@@ -20,6 +20,21 @@ public class EditController {
 	
 	
 	@FXML
-	void editSong() {}
+	void editSong() {};
+	
+		@FXML
+	void backToList(ActionEvent event) {
+		try {
+			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
+			Scene newScene = new Scene (editView);
+			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
+			
+			window.setScene(newScene);
+			window.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	};
 	
 }
