@@ -39,19 +39,17 @@ public class SongList {
 //	}
 	
 	public static ObservableList<Song> getSongs() {
+		obsList.clear();
 		songListTM.forEach((k,v) -> {
-			if ( !obsList.contains(v)) {
-				obsList.add(v);
-			}
+			obsList.add(v);	
 		});
 		return obsList;
 	}
 	
 	public static ObservableList<String> getTitlesAndArtists() {
+		obsListTitle.clear();
 		songListTM.forEach((k,v) -> {
-			if ( !obsListTitle.contains("Title: " + k[0] + "\nArtist: " + k[1]) ) {
-				obsListTitle.add("Title: " + k[0] + "\nArtist: " + k[1]);
-			}
+			obsListTitle.add("Title: " + k[0] + "\nArtist: " + k[1]);	
 		});
 		return obsListTitle;
 	}
