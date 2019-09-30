@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -18,8 +17,13 @@ import classes.Song;
 
 public class AddController {
 	
-	
 	@FXML
-	void addSong() {}
+	TextField title;
+	@FXML
+	TextField artist;
+	@FXML
+	TextField album;
+	@FXML
+	TextField year;
 	
 }

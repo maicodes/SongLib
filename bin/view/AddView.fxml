@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.GridPane?>
 
-<GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AddController">
+<GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SongListController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -33,11 +33,11 @@
       </Pane>
       <AnchorPane prefHeight="450.0" prefWidth="600.0">
          <children>
-            <Button layoutX="260.0" layoutY="376.0" mnemonicParsing="false" onMouseClicked="#addSong" text="+ Add Song" />
+            <Button fx:id="addButton" layoutX="260.0" layoutY="376.0" mnemonicParsing="false" onAction="#addSong" onMouseClicked="#addSong" text="+ Add Song" />
             <Button layoutX="63.0" layoutY="376.0" mnemonicParsing="false" text="Back to List" />
          </children>
       </AnchorPane>
-      <GridPane fx:id="addsong" prefHeight="450.0" prefWidth="600.0">
+      <GridPane prefHeight="450.0" prefWidth="600.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="160.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="1.0" prefWidth="233.0" />

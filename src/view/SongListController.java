@@ -106,6 +106,21 @@ public class SongListController {
 	}	
 	
 	@FXML
+	private void addSong(ObservableList<Song> obsList) {
+		String strTitle = title.getText();
+		String strArtist = artist.getText();
+		String strAlbum = album.getText();
+		String strYear = year.getText();
+		Song song = new Song(strTitle, strArtist, strAlbum, strYear);
+		
+		/*
+		 * Sorting algo here using obsList
+		 */	
+		
+		return obsList;		
+	}
+	
+	@FXML
 	private void deleteSong() {}
 
 }
