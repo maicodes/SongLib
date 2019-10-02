@@ -4,6 +4,7 @@ import java.util.TreeMap;
 import java.util.Comparator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import view.SongListController;
 
 class CompareTwoStringArrays implements Comparator<String[]>{
 	 
@@ -22,22 +23,6 @@ public class SongList {
 	
 	private static ObservableList<String> obsListTitle = FXCollections.observableArrayList();  
 	
-//	private String getTitle() {
-//		return"";
-//	}
-//	
-//	private String getArtist() {
-//		return"";
-//	}
-//	
-//	private String getAlbum() {
-//		return "";
-//	}
-//	
-//	private String getYear() {
-//		return "";
-//	}
-	
 	public static ObservableList<Song> getSongs() {
 		obsList.clear();
 		songListTM.forEach((k,v) -> {
@@ -47,7 +32,9 @@ public class SongList {
 	}
 	
 	public static ObservableList<String> getTitlesAndArtists() {
+//		Clearing the VIEW
 		obsListTitle.clear();
+//		Adds everything from Treemap back into view
 		songListTM.forEach((k,v) -> {
 			obsListTitle.add("Title: " + k[0] + "\nArtist: " + k[1]);	
 		});
@@ -55,14 +42,23 @@ public class SongList {
 	}
 	
 	public static boolean editSong(Song song) {
+//		Removes song from objList to re-add later
+		deleteSongObj(song);
+
+//		Inputed Song
 		String title = song.getTitle();
 		String artist = song.getArtist();
+		String album = song.getAlbum();
+		String year = song.getYear();
+		
 		String[] key = {title, artist};
 		if ( songListTM.containsKey( key ) ) {
-			
-			return true;
+			songListTM.put(key, song);
+			return false;
 		}
-		return false;
+		Song edit = new Song(title, artist, album, year);
+		songListTM.put(key, edit);
+		return true;
 	}
 	
 	public static boolean addNewSong(Song newSong) {
@@ -72,19 +68,17 @@ public class SongList {
 		if ( songListTM.containsKey( key ) ) {
 			return false;
 		} 
+//		Adds to treemap - sorts on its own
 		songListTM.put(key, newSong);
 		return true;
 	}
 	
-	public static boolean deleteSong(String title, String artist) {
-		boolean isRemoved = false;
+//	Removes from objList
+	public static void deleteSongObj(Song selected) {
+		String title = selected.getTitle();
+		String artist = selected.getArtist();
 		String[] key = {title, artist};
-		if ( songListTM.containsKey(key) ) {
-				songListTM.remove(key);
-				isRemoved = true;
-			
-		}
-		return isRemoved;
+		songListTM.remove(key);
 	}
 
 	public static TreeMap<String[], Song > getSongListTM() {

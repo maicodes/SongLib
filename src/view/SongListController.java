@@ -38,7 +38,9 @@ public class SongListController {
 //	Scene editScene;
 
 	private ObservableList<Song> obsList;  
-	private ObservableList<String> obsListTitle;  
+	private ObservableList<String> obsListTitle;
+//	Currently selected item
+	public static Song currItem;
 	
 	public void start(Stage mainStage) {                
 		// create an ObservableList 
@@ -55,6 +57,7 @@ public class SongListController {
 		     artist.setText(obsList.get(0).getArtist());
 			 album.setText(obsList.get(0).getAlbum());
 			 year.setText(obsList.get(0).getYear());
+			 currItem = obsList.get(0);
 		}
 	      // set listener for the items
 	      listView
@@ -63,15 +66,15 @@ public class SongListController {
 	        .addListener(
 	           (obs, oldVal, newVal) -> 
 	               showItem(mainStage,  listView.getSelectionModel().getSelectedIndex() ));
-	     
-
 	}
+	
 	
 	private void showItem(Stage mainStage, int idx) {                
 		 title.setText(obsList.get(idx).getTitle());  
 		 artist.setText(obsList.get(idx).getArtist());
 		 album.setText(obsList.get(idx).getAlbum());
 		 year.setText(obsList.get(idx).getYear());
+		 currItem = obsList.get(idx);
 	}
 	
 	@FXML
@@ -106,7 +109,18 @@ public class SongListController {
 	
 	@FXML
 	private void deleteSong(ActionEvent event) {
-		
+		SongList.deleteSongObj(currItem);
+//		Removes from view
+		final int selectedIdx = listView.getSelectionModel().getSelectedIndex();
+        if (selectedIdx != -1) { 
+        	final int newSelectedIdx =
+        			(selectedIdx == listView.getItems().size() - 1)
+        			? selectedIdx - 1
+        			: selectedIdx;
+ 
+        	listView.getItems().remove(selectedIdx);
+        	listView.getSelectionModel().select(newSelectedIdx);
+        }
 	}
 
 }
