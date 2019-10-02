@@ -93,11 +93,30 @@ public class EditController implements Initializable{
 	
 		@FXML
 	void backToList(ActionEvent event) {
+//		try {
+//			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
+//			Scene newScene = new Scene (editView);
+//			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
+//			
+//			window.setScene(newScene);
+//			window.show();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		try {
-			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
-			Scene newScene = new Scene (editView);
+			FXMLLoader loader = new FXMLLoader();   
+			loader.setLocation(
+				getClass().getResource("/view/SongListView.fxml"));
+			AnchorPane root = (AnchorPane)loader.load();
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
-			
+
+			SongListController listController = loader.getController();
+			listController.start(window);
+//			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
+			Scene newScene = new Scene (root);
+				
+				
 			window.setScene(newScene);
 			window.show();
 		} catch (IOException e) {

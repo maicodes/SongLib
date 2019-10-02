@@ -66,8 +66,7 @@ public class SongListController {
 	        .addListener(
 	           (obs, oldVal, newVal) -> 
 	               showItem(mainStage,  listView.getSelectionModel().getSelectedIndex() ));
-	}
-	
+	}	
 	
 	private void showItem(Stage mainStage, int idx) {                
 		 title.setText(obsList.get(idx).getTitle());  
@@ -86,6 +85,7 @@ public class SongListController {
 			
 			window.setScene(newScene);
 			window.show();
+	        
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
