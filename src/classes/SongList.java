@@ -4,24 +4,22 @@ import java.util.TreeMap;
 import java.util.Comparator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import view.SongListController;
 
 class CompareTwoStringArrays implements Comparator<String[]>{
 	 
     @Override
     public int compare(String[] e1, String[] e2) {
-    	int r = e1[0].compareTo(e2[0]); 	
+    	int r = e1[0].compareToIgnoreCase(e2[0]); 	
     	if (r != 0 ) return r;
-    	return e1[1].compareTo(e2[1]);
+    	return e1[1].compareToIgnoreCase(e2[1]);
     }
 }
 public class SongList {
 	
-	private static TreeMap<String[], Song > songListTM = new TreeMap<String[], Song >( new CompareTwoStringArrays() );
+	public static TreeMap<String[], Song > songListTM = new TreeMap<String[], Song >( new CompareTwoStringArrays() );
 	
 	private static ObservableList<Song> obsList = FXCollections.observableArrayList();
 	
-	private static ObservableList<String> obsListTitle = FXCollections.observableArrayList();  
 	
 	public static ObservableList<Song> getSongs() {
 		obsList.clear();
@@ -31,33 +29,19 @@ public class SongList {
 		return obsList;
 	}
 	
-	public static ObservableList<String> getTitlesAndArtists() {
-//		Clearing the VIEW
-		obsListTitle.clear();
-//		Adds everything from Treemap back into view
-		songListTM.forEach((k,v) -> {
-			obsListTitle.add("Title: " + k[0] + "\nArtist: " + k[1]);	
-		});
-		return obsListTitle;
-	}
 	
-	public static boolean editSong(Song song) {
-//		Removes song from objList to re-add later
-		deleteSongObj(song);
-
+	public static boolean editSong(Song oldSong, Song newSong) {
 //		Inputed Song
-		String title = song.getTitle();
-		String artist = song.getArtist();
-		String album = song.getAlbum();
-		String year = song.getYear();
-		
+		String title = newSong.getTitle();
+		String artist = newSong.getArtist();
 		String[] key = {title, artist};
 		if ( songListTM.containsKey( key ) ) {
-			songListTM.put(key, song);
 			return false;
 		}
-		Song edit = new Song(title, artist, album, year);
-		songListTM.put(key, edit);
+//		Removes song from objList to re-add later
+		deleteSongObj(oldSong);
+		obsList.remove(oldSong);
+		songListTM.put(key, newSong);
 		return true;
 	}
 	
@@ -83,6 +67,10 @@ public class SongList {
 
 	public static TreeMap<String[], Song > getSongListTM() {
 		return songListTM;
+	}
+	
+	public static ObservableList<Song> getObsList(){
+		return obsList;
 	}
 
 	
