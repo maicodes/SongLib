@@ -33,6 +33,7 @@ public class EditController implements Initializable{
 	
 	Song newSong;
 	Song oldSong;
+	boolean isEdited;
 	@Override
 //	Initializes textfields to selected song
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,7 +57,7 @@ public class EditController implements Initializable{
 			return;
 		}
 		newSong = new Song(title, artistName, albumName, yearPublic);
-		boolean isEdited = SongList.editSong(oldSong, newSong);
+		isEdited = SongList.editSong(oldSong, newSong);
 
 		if ( !isEdited ) {
 			showAlert(stage, false);
@@ -115,7 +116,7 @@ public class EditController implements Initializable{
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
 
 			SongListController listController = loader.getController();
-			if ( newSong != null ) {
+			if ( newSong != null && isEdited) {
 				listController.index = SongList.getSongs().indexOf(newSong);
 			}
 			listController.isStart = false;

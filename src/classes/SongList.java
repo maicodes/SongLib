@@ -31,14 +31,17 @@ public class SongList {
 	
 	
 	public static boolean editSong(Song oldSong, Song newSong) {
+//		Removes song from objList to re-add later
+		deleteSongObj(oldSong);
 //		Inputed Song
 		String title = newSong.getTitle();
 		String artist = newSong.getArtist();
 		String[] key = {title, artist};
 		if ( songListTM.containsKey( key ) ) {
+			String[] oldKey = {oldSong.getTitle(), oldSong.getArtist()};
+			songListTM.put(oldKey, newSong);
 			return false;
 		}
-//		Removes song from objList to re-add later
 		deleteSongObj(oldSong);
 		obsList.remove(oldSong);
 		songListTM.put(key, newSong);
