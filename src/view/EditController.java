@@ -52,7 +52,7 @@ public class EditController implements Initializable{
 	
 	
 	@FXML
-	void editSong() {
+	void editSong(ActionEvent event) {
 		String title = songname.getText();
 		String artistName = artist.getText();
 		String albumName = album.getText();
@@ -70,7 +70,31 @@ public class EditController implements Initializable{
 		}
 		else {
 			showAlert(stage, true);
+			try {
+				FXMLLoader loader = new FXMLLoader();   
+				loader.setLocation(
+					getClass().getResource("/view/SongListView.fxml"));
+				AnchorPane root = (AnchorPane)loader.load();
+				Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
+
+				SongListController listController = loader.getController();
+				if ( newSong != null && isEdited) {
+					listController.index = SongList.getSongs().indexOf(newSong);
+				}
+				listController.isStart = false;
+				System.out.println(listController.index + "");
+				listController.start(window);
+//				AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
+				Scene newScene = new Scene (root);
+				window.setScene(newScene);
+				window.show();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		
 	};
 	
 	private void showAlert(Stage mainStage, boolean isAdded) {                
