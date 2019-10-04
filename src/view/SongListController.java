@@ -170,7 +170,6 @@ public class SongListController  {
 				   line = br.readLine(); //to the next song name, if not null
 			   }
 			  
-				
 		   } catch (IOException e) {
 			   e.printStackTrace();
 		   }
@@ -224,8 +223,7 @@ public class SongListController  {
 	      String content = "There is no song to edit!";
 	          alert.setContentText(content);
 	          alert.showAndWait();
-	          
-	   }
+	}
 	
 	@FXML
 	private void moveToAddSong (ActionEvent event) {
