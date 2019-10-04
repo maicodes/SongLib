@@ -35,7 +35,7 @@ public class AddController {
 	TextField year;
 
 	Song newSong;
-	boolean isAdded;
+	boolean isAdded = false;
 	@FXML
 	void addSong(ActionEvent event) {
 		String title = songname.getText();
