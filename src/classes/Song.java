@@ -1,3 +1,9 @@
+/* 
+ * Phi Hoang
+ * Mai Le
+ * Software Methodology
+*/
+
 package classes;
 
 public class Song {

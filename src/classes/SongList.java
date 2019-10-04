@@ -1,3 +1,9 @@
+/* 
+ * Phi Hoang
+ * Mai Le
+ * Software Methodology
+*/
+
 package classes;
 
 import java.util.TreeMap;
@@ -38,6 +44,7 @@ public class SongList {
 		String artist = newSong.getArtist();
 		String[] key = {title, artist};
 		if ( songListTM.containsKey( key ) ) {
+//			Adds old song back
 			String[] oldKey = {oldSong.getTitle(), oldSong.getArtist()};
 			songListTM.put(oldKey, newSong);
 			return false;

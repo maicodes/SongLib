@@ -15,6 +15,12 @@ import javafx.scene.Node;
 import classes.Song;
 import classes.SongList;
 
+/* 
+ * Phi Hoang
+ * Mai Le
+ * Software Methodology
+*/
+
 public class AddController {
 	@FXML
 	Button addBtn;
