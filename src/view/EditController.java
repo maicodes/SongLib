@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -33,21 +30,17 @@ public class EditController implements Initializable{
 	private TextField album;
 	@FXML
 	private TextField year;
-		
+	
+	Song newSong;
+	Song oldSong;
 	@Override
 //	Initializes textfields to selected song
     public void initialize(URL url, ResourceBundle rb) {
-    	Song song = SongListController.currItem;
-
-    	String title = song.getTitle();
-		String artistName = song.getArtist();
-		String albumName = song.getAlbum();
-		String yearPublic = song.getYear();
-
-        songname.setText(title);
-        artist.setText(artistName);
-        album.setText(albumName);
-        year.setText(yearPublic);
+    	oldSong = SongListController.currItem;
+        songname.setText(oldSong.getTitle());
+        artist.setText(oldSong.getArtist());
+        album.setText(oldSong.getAlbum());
+        year.setText(oldSong.getYear());
     } 
 	
 	
@@ -57,16 +50,19 @@ public class EditController implements Initializable{
 		String artistName = artist.getText();
 		String albumName = album.getText();
 		String yearPublic = year.getText();
-		Song newSong = new Song(title, artistName, albumName, yearPublic);
-		boolean isAdded = SongList.editSong(newSong);
 		Stage stage = (Stage) editBtn.getScene().getWindow();
-		//System.out.println(isAdded + "");
-		if ( !isAdded ) {
+		if ( songname == null || artist == null || title.trim().isEmpty()  || artistName.trim().isEmpty()  ) {
+			showAlert2(stage);
+			return;
+		}
+		newSong = new Song(title, artistName, albumName, yearPublic);
+		boolean isEdited = SongList.editSong(oldSong, newSong);
+
+		if ( !isEdited ) {
 			showAlert(stage, false);
 		}
 		else {
 			showAlert(stage, true);
-			//System.out.println();
 		}
 	};
 	
@@ -75,7 +71,7 @@ public class EditController implements Initializable{
 	         new Alert(AlertType.INFORMATION);
 	      //alert.initModality(Modality.NONE);
 	      alert.initOwner(mainStage);
-	      alert.setTitle("Add New Song");
+	      alert.setTitle("Edit Song");
 	      String content ="";
 	      if ( !isAdded ) {
 	    	   alert.setHeaderText(
@@ -91,19 +87,26 @@ public class EditController implements Initializable{
 	          
 	   }
 	
-		@FXML
+	private void showAlert2(Stage mainStage) {                
+	      Alert alert = 
+	         new Alert(AlertType.INFORMATION);
+	      //alert.initModality(Modality.NONE);
+	      alert.initOwner(mainStage);
+	      alert.setTitle("Edit Song");
+	      alert.setHeaderText(
+	    	           "Cannot edit song");
+	      String  content = "Title and Artist are required!";
+	   
+	      alert.setContentText(content);
+	      alert.showAndWait();
+	          
+	   }
+	
+	
+	
+	@FXML
 	void backToList(ActionEvent event) {
-//		try {
-//			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
-//			Scene newScene = new Scene (editView);
-//			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
-//			
-//			window.setScene(newScene);
-//			window.show();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 		try {
 			FXMLLoader loader = new FXMLLoader();   
 			loader.setLocation(
@@ -112,11 +115,14 @@ public class EditController implements Initializable{
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
 
 			SongListController listController = loader.getController();
+			if ( newSong != null ) {
+				listController.index = SongList.getSongs().indexOf(newSong);
+			}
+			listController.isStart = false;
+			System.out.println(listController.index + "");
 			listController.start(window);
 //			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
 			Scene newScene = new Scene (root);
-				
-				
 			window.setScene(newScene);
 			window.show();
 		} catch (IOException e) {

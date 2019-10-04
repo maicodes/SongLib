@@ -28,23 +28,27 @@ public class AddController {
 	@FXML
 	TextField year;
 
-	
+	Song newSong;
 	@FXML
 	void addSong(ActionEvent event) {
 		String title = songname.getText();
 		String artistName = artist.getText();
 		String albumName = album.getText();
 		String yearPublic = year.getText();
-		Song newSong = new Song(title, artistName, albumName, yearPublic);
-		boolean isAdded = SongList.addNewSong(newSong);
 		Stage stage = (Stage) addBtn.getScene().getWindow();
+		System.out.println(title + "\n" + artistName);
+		if ( songname == null || artist == null || title.trim().isEmpty()  || artistName.trim().isEmpty()  ) {
+			showAlert2(stage);
+			return;
+		}
+		newSong = new Song(title, artistName, albumName, yearPublic);
+		boolean isAdded = SongList.addNewSong(newSong);
 		//System.out.println(isAdded + "");
 		if ( !isAdded ) {
 			showAlert(stage, false);
 		}
 		else {
 			showAlert(stage, true);
-			//System.out.println();
 		}
 	}
 	
@@ -69,6 +73,21 @@ public class AddController {
 	          
 	   }
 	
+	private void showAlert2(Stage mainStage) {                
+	      Alert alert = 
+	         new Alert(AlertType.INFORMATION);
+	      //alert.initModality(Modality.NONE);
+	      alert.initOwner(mainStage);
+	      alert.setTitle("Add New Song");
+	      alert.setHeaderText(
+	    	           "Cannot add new song");
+	      String  content = "Title and Artist are required!";
+	   
+	      alert.setContentText(content);
+	      alert.showAndWait();
+	          
+	   }
+	
 	@FXML
 	void backToList(ActionEvent event) {
 		try {
@@ -77,8 +96,11 @@ public class AddController {
 					getClass().getResource("/view/SongListView.fxml"));
 			AnchorPane root = (AnchorPane)loader.load();
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
-
 			SongListController listController = loader.getController();
+			if ( newSong != null ) {
+				listController.index = SongList.getSongs().indexOf(newSong);
+			}
+			listController.isStart = false;
 			listController.start(window);
 //			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
 			Scene newScene = new Scene (root);
