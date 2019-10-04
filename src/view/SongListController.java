@@ -1,16 +1,20 @@
 package view;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
-
 import javafx.collections.FXCollections;
-import java.util.TreeMap;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.fxml.FXMLLoader;
@@ -20,55 +24,167 @@ import classes.Song;
 import classes.SongList;
 
 
-public class SongListController {
+public class SongListController  {
 	
 	@FXML         
-	ListView<String> listView;  
+	ListView<Song> listView;  
 	@FXML
-	TextField title;
+	Label title;
 	@FXML
-	TextField artist;
+	Label artist;
 	@FXML
-	TextField album;
+	Label album;
 	@FXML
-	TextField year;
-	
-//	Stage window;
-//	Scene addScene;
-//	Scene editScene;
-
+	Label year;
+	boolean isStart = true;
+	int index = 0;
+	Stage window;
 	private ObservableList<Song> obsList;  
-	private ObservableList<String> obsListTitle;
 //	Currently selected item
 	public static Song currItem;
 	
 	public void start(Stage mainStage) {                
 		// create an ObservableList 
 		// from an ArrayList 
-		obsListTitle = SongList.getTitlesAndArtists();
-		obsList = SongList.getSongs();
+		window = mainStage;
+		System.out.println(isStart + "");
+				if (isStart) {
+					obsList = FXCollections.observableArrayList(readFromFile("src/songs.txt")); 
+					if ( obsList != null && obsList.size() > 0 ) {
+						for(Song s : obsList) {
+							String title = s.getTitle();
+							String artist = s.getArtist();
+							String[] key = {title, artist};
+							SongList.songListTM.put(key, s);
+						}
+					}
+				}
+				else {
+					obsList = SongList.getSongs();
+				}
+				
+				 listView.setItems(obsList); 
+				 
+				 /*
+				  * Setup Cells
+				  */
+				 listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>() {
+				        @Override
+			            public ListCell<Song> call(ListView<Song> p) {
+			                 
+			                ListCell<Song> cell = new ListCell<Song>(){
+			 
+			                    @Override
+			                    protected void updateItem(Song song, boolean empty) {
+			                        super.updateItem(song,empty);
+			                        if (song != null) {
+			                            setText("Title: " + song.getTitle() +"\nArtist: " + song.getArtist());
+			                        }
+			                        else if (song == null)
+			                        {		                        	
+			                        	setText(null);
+			                        }
+			                    }
+			 
+			                };
+			                 
+			                return cell;
+			            }
+			       });
+			      
+			    // select the first item
+				//System.out.print(obsList.size() + "");
+				if ( obsList != null && obsList.size() > 0 ) 
+				{
+					 listView.getSelectionModel().select(index);
+				     title.setText(obsList.get(index).getTitle());  
+				     artist.setText(obsList.get(index).getArtist());
+					 album.setText(obsList.get(index).getAlbum());
+					 year.setText(obsList.get(index).getYear());
+					 currItem = obsList.get(index);
+				}
+			      // set listener for the items
+			      listView
+			        .getSelectionModel()
+			        .selectedIndexProperty()
+			        .addListener(
+			           (obs, oldVal, newVal) -> 
+			               showItem());
+			      
+			    //save data to songs.txt before the application is terminated
+			    mainStage.setOnCloseRequest(event -> {  
+			    	  PrintWriter writer;
+			    	  	try {
+			    	  			File file = new File ("src/songs.txt");
+			    	  			file.createNewFile();
+			    	  			writer = new PrintWriter(file);
+								for(Song s: obsList)
+						    	  {
+						    		  writer.println(s.getTitle());
+						    		  writer.println(s.getArtist());
+						    		  writer.println(s.getAlbum());
+						    		  writer.println(s.getYear());
+						    		  
+						    	  }
+						    	 writer.close(); 
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}    	 
+			      }); 
 
-		listView.setItems(obsListTitle); 
-		
-		// select the first item
-		if ( obsList.size() > 0 ) {
-			 listView.getSelectionModel().select(0);
-		     title.setText(obsList.get(0).getTitle());  
-		     artist.setText(obsList.get(0).getArtist());
-			 album.setText(obsList.get(0).getAlbum());
-			 year.setText(obsList.get(0).getYear());
-			 currItem = obsList.get(0);
-		}
-	      // set listener for the items
-	      listView
-	        .getSelectionModel()
-	        .selectedIndexProperty()
-	        .addListener(
-	           (obs, oldVal, newVal) -> 
-	               showItem(mainStage,  listView.getSelectionModel().getSelectedIndex() ));
-	}	
+	   }
+
 	
-	private void showItem(Stage mainStage, int idx) {                
+	private ObservableList<Song> readFromFile(String filePathName)
+	   {
+		 ObservableList<Song> songs = FXCollections.observableArrayList();
+				 
+		   BufferedReader br;
+		   Path filePath = Paths.get(filePathName);
+		   try {
+
+				if (!new File(filePathName).exists())
+				{
+				   return songs;
+				}
+			   br = Files.newBufferedReader(filePath);
+			   String line = br.readLine();
+				
+			   while (line != null) { 
+		              
+				   String title = line;
+		               
+				   line = br.readLine();
+				   String artist = line;
+		               
+				   line = br.readLine();
+				   String album = line;
+		               
+				   line = br.readLine();
+				   String year = line;
+		               
+				   Song temp = new Song(title, artist, album, year);
+				   songs.add(temp);
+		               
+				   line = br.readLine(); //to the next song name, if not null
+			   }
+			  
+				
+		   } catch (IOException e) {
+			   e.printStackTrace();
+		   }
+		      
+		   //sort songs alphabetically by title
+//		   Collections.sort(songs, new SongComparator());
+		   return songs;
+	   }
+
+
+	private void showItem() {   
+		int idx = listView.getSelectionModel().getSelectedIndex();
+		if (idx < 0 ) return;
+		//System.out.println("index: " + idx);
 		 title.setText(obsList.get(idx).getTitle());  
 		 artist.setText(obsList.get(idx).getArtist());
 		 album.setText(obsList.get(idx).getAlbum());
@@ -79,6 +195,10 @@ public class SongListController {
 	@FXML
 	private void moveToEditSong(ActionEvent event) {
 		try {
+			if ( currItem  == null ) {
+				showAlert(window);
+				return;
+			}
 			GridPane editView = FXMLLoader.load(getClass().getResource("/view/EditView.fxml"));
 			Scene newScene = new Scene (editView);
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
@@ -92,6 +212,21 @@ public class SongListController {
 		}
 		
 	}
+	
+	private void showAlert(Stage mainStage) {                
+	      Alert alert = 
+	         new Alert(AlertType.INFORMATION);
+	      //alert.initModality(Modality.NONE);
+	      alert.initOwner(mainStage);
+	      alert.setTitle("Edit Song");
+	      alert.setHeaderText(
+	    	           "Cannot edit song");
+	      String content = "There is no song to edit!";
+	          alert.setContentText(content);
+	          alert.showAndWait();
+	          
+	   }
+	
 	@FXML
 	private void moveToAddSong (ActionEvent event) {
 		try {
@@ -110,6 +245,7 @@ public class SongListController {
 	@FXML
 	private void deleteSong(ActionEvent event) {
 		SongList.deleteSongObj(currItem);
+		obsList.remove(currItem);
 //		Removes from view
 		final int selectedIdx = listView.getSelectionModel().getSelectedIndex();
         if (selectedIdx != -1) { 
@@ -120,6 +256,15 @@ public class SongListController {
  
         	listView.getItems().remove(selectedIdx);
         	listView.getSelectionModel().select(newSelectedIdx);
+        } else {
+        	System.out.print("size: " + obsList.size());
+        	if (obsList.size() == 0 ) {
+             	 title.setText(null);  
+        		 artist.setText(null);
+        		 album.setText(null);
+        		 year.setText(null);
+        		 currItem = null;
+        	}
         }
 	}
 

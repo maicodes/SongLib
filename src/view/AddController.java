@@ -1,11 +1,9 @@
 package view;
 
 import java.io.IOException;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -18,7 +16,6 @@ import classes.SongList;
 public class AddController {
 	@FXML
 	Button addBtn;
-	
 	@FXML
 	TextField songname;
 	@FXML
@@ -44,7 +41,6 @@ public class AddController {
 		}
 		else {
 			showAlert(stage, true);
-			//System.out.println();
 		}
 	}
 	
@@ -77,8 +73,8 @@ public class AddController {
 					getClass().getResource("/view/SongListView.fxml"));
 			AnchorPane root = (AnchorPane)loader.load();
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
-
 			SongListController listController = loader.getController();
+			listController.isStart = false;
 			listController.start(window);
 //			AnchorPane editView = FXMLLoader.load(getClass().getResource("/view/SongListView.fxml"));
 			Scene newScene = new Scene (root);
