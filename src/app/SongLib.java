@@ -1,16 +1,17 @@
+/* 
+ * Phi Hoang
+ * Mai Le
+ * Software Methodology
+*/
+
 package app;
 
-
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
+
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +33,7 @@ public class SongLib extends Application {
 
 		SongListController listController = loader.getController();
 		listController.start(primaryStage);
-
+		primaryStage.setResizable(false);
 		Scene scene = new Scene(root, 600.0, 450.0);
 		primaryStage.setScene(scene);
 		primaryStage.show(); 

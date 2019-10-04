@@ -54,16 +54,24 @@
             <Label alignment="CENTER_RIGHT" contentDisplay="TOP" prefHeight="17.0" prefWidth="109.0" text="Album" GridPane.rowIndex="3" />
             <TextField fx:id="year" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label alignment="CENTER_RIGHT" contentDisplay="TOP" prefHeight="17.0" prefWidth="109.0" text="Year" GridPane.rowIndex="4" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <Button fx:id="editBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editSong" text="OK">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#backToList" text="Back to List" />
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </padding>
       </GridPane>
-      <AnchorPane prefHeight="450.0" prefWidth="600.0">
-         <children>
-            <Button layoutX="284.0" layoutY="376.0" mnemonicParsing="false" onAction="#editSong" text="OK" />
-            <Button layoutX="63.0" layoutY="376.0" mnemonicParsing="false" onAction="#backToList" text="Back to List" />
-         </children>
-      </AnchorPane>
    </children>
 </GridPane>

@@ -1,3 +1,9 @@
+/* 
+ * Phi Hoang
+ * Mai Le
+ * Software Methodology
+*/
+
 package classes;
 
 import java.util.TreeMap;
@@ -9,34 +15,17 @@ class CompareTwoStringArrays implements Comparator<String[]>{
 	 
     @Override
     public int compare(String[] e1, String[] e2) {
-    	int r = e1[0].compareTo(e2[0]); 	
+    	int r = e1[0].compareToIgnoreCase(e2[0]); 	
     	if (r != 0 ) return r;
-    	return e1[1].compareTo(e2[1]);
+    	return e1[1].compareToIgnoreCase(e2[1]);
     }
 }
 public class SongList {
 	
-	private static TreeMap<String[], Song > songListTM = new TreeMap<String[], Song >( new CompareTwoStringArrays() );
+	public static TreeMap<String[], Song > songListTM = new TreeMap<String[], Song >( new CompareTwoStringArrays() );
 	
 	private static ObservableList<Song> obsList = FXCollections.observableArrayList();
 	
-	private static ObservableList<String> obsListTitle = FXCollections.observableArrayList();  
-	
-//	private String getTitle() {
-//		return"";
-//	}
-//	
-//	private String getArtist() {
-//		return"";
-//	}
-//	
-//	private String getAlbum() {
-//		return "";
-//	}
-//	
-//	private String getYear() {
-//		return "";
-//	}
 	
 	public static ObservableList<Song> getSongs() {
 		obsList.clear();
@@ -46,23 +35,24 @@ public class SongList {
 		return obsList;
 	}
 	
-	public static ObservableList<String> getTitlesAndArtists() {
-		obsListTitle.clear();
-		songListTM.forEach((k,v) -> {
-			obsListTitle.add("Title: " + k[0] + "\nArtist: " + k[1]);	
-		});
-		return obsListTitle;
-	}
 	
-	public static boolean editSong(Song song) {
-		String title = song.getTitle();
-		String artist = song.getArtist();
+	public static boolean editSong(Song oldSong, Song newSong) {
+//		Removes song from objList to re-add later
+		deleteSongObj(oldSong);
+//		Inputed Song
+		String title = newSong.getTitle();
+		String artist = newSong.getArtist();
 		String[] key = {title, artist};
 		if ( songListTM.containsKey( key ) ) {
-			
-			return true;
+//			Adds old song back
+			String[] oldKey = {oldSong.getTitle(), oldSong.getArtist()};
+			songListTM.put(oldKey, newSong);
+			return false;
 		}
-		return false;
+		deleteSongObj(oldSong);
+		obsList.remove(oldSong);
+		songListTM.put(key, newSong);
+		return true;
 	}
 	
 	public static boolean addNewSong(Song newSong) {
@@ -72,23 +62,25 @@ public class SongList {
 		if ( songListTM.containsKey( key ) ) {
 			return false;
 		} 
+//		Adds to treemap - sorts on its own
 		songListTM.put(key, newSong);
 		return true;
 	}
 	
-	public static boolean deleteSong(String title, String artist) {
-		boolean isRemoved = false;
+//	Removes from objList
+	public static void deleteSongObj(Song selected) {
+		String title = selected.getTitle();
+		String artist = selected.getArtist();
 		String[] key = {title, artist};
-		if ( songListTM.containsKey(key) ) {
-				songListTM.remove(key);
-				isRemoved = true;
-			
-		}
-		return isRemoved;
+		songListTM.remove(key);
 	}
 
 	public static TreeMap<String[], Song > getSongListTM() {
 		return songListTM;
+	}
+	
+	public static ObservableList<Song> getObsList(){
+		return obsList;
 	}
 
 	
