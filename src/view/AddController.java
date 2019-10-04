@@ -35,6 +35,7 @@ public class AddController {
 	TextField year;
 
 	Song newSong;
+	boolean isAdded;
 	@FXML
 	void addSong(ActionEvent event) {
 		String title = songname.getText();
@@ -48,7 +49,7 @@ public class AddController {
 			return;
 		}
 		newSong = new Song(title, artistName, albumName, yearPublic);
-		boolean isAdded = SongList.addNewSong(newSong);
+		isAdded = SongList.addNewSong(newSong);
 		//System.out.println(isAdded + "");
 		if ( !isAdded ) {
 			showAlert(stage, false);
@@ -103,7 +104,7 @@ public class AddController {
 			AnchorPane root = (AnchorPane)loader.load();
 			Stage window = (Stage) ( (Node) event.getSource()).getScene().getWindow();
 			SongListController listController = loader.getController();
-			if ( newSong != null ) {
+			if ( newSong != null && isAdded) {
 				listController.index = SongList.getSongs().indexOf(newSong);
 			}
 			listController.isStart = false;
